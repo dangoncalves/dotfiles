@@ -1,0 +1,24 @@
+[user]
+	name = Daniel Gonçalves
+	email = daniel.gonc@lves.fr
+	username = dangoncalves
+[alias]
+	st = status
+	br = branch
+	df = diff
+	dc = diff --cached
+	co = checkout
+	ci = commit
+[push]
+	default = simple
+[color]
+	ui = auto
+[merge]
+	tool = ediff3
+[core]
+	editor = emacs
+	excludesfile = /home/daniel/.gitignore_global
+[commit]
+	gpgsign = false
+[init]
+	defaultBranch = main
