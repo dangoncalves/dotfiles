@@ -1,4 +1,4 @@
 ---
-hostname: CHANGE_ME
+hostname: phobos
 description: |
-  CHANGE THIS DESCRIPTION
+  This is my personnal computer: an Intel nuc called phobos.
