@@ -2,3 +2,9 @@
 hostname: phobos
 description: |
   This is my personnal computer: an Intel nuc called phobos.
+readme: |
+  In order to configure this computer, you need to setup the TERM
+  capabilities to handle 24bit. Just compile the source with
+  ```
+  tic -x -o ~/.terminfo ~/.terminfo-24.src
+  ```
