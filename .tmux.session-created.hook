@@ -1,0 +1,3 @@
+send-keys "htop\n"
+rename-window Monitoring
+new-window
