@@ -19,6 +19,11 @@ function purge_tmp_file
     find $directory -name '*~' -delete
 end
 
+function ssh
+    set SSH_BIN (which ssh)
+    TERM=xterm-256color $SSH_BIN $argv
+end
+
 function config
     set repo git@gitlab.com:dangoncalves/dotfiles
     set gitdir ~/.local/share/dotfiles
