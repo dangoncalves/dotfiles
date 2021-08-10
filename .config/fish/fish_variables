@@ -1,7 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR --path INFOPATH:/usr/local/texlive/2021/texmf/doc/info
-SETUVAR --path MANPATH:/usr/local/texlive/2021/texmf/doc/man
+SETUVAR --path MANPATH:/usr/local/texlive/2021/texmf/doc/man\x1e/usr/share/man\x1e/usr/local/man\x1e/usr/local/share/man\x1e/usr/X11R6/man\x1e/opt/man
 SETUVAR __fish_initialized:3100
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
