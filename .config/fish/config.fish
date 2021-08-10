@@ -24,6 +24,16 @@ function ssh
     TERM=xterm-256color $SSH_BIN $argv
 end
 
+function vagrant
+    set VAGRANT_BIN (which vagrant)
+    TERM=xterm-256color $VAGRANT_BIN $argv
+end
+
+function sudo
+    set SUDO_BIN (which sudo)
+    TERM=xterm-256color $SUDO_BIN $argv
+end
+
 function config
     set repo git@gitlab.com:dangoncalves/dotfiles
     set gitdir ~/.local/share/dotfiles
