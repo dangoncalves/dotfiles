@@ -1,0 +1,5 @@
+if-shell 'test -n "$SSH_CLIENT"' 'source-file ~/.tmux.d/nested.conf'
+
+send-keys "htop\n"
+rename-window Monitoring
+new-window

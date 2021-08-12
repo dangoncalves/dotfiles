@@ -1,0 +1,4 @@
+set -u prefix
+set -u key-table
+set-option -g status on
+refresh-client -S
