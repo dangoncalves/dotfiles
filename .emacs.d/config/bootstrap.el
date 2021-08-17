@@ -63,4 +63,8 @@
 (use-package better-defaults
   :ensure t)
 
+;; Configure fish-mode
+(use-package fish-mode
+  :ensure t)
+
 (provide 'bootstrap)
