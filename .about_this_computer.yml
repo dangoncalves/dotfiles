@@ -1,7 +1,7 @@
 ---
-hostname: phobos
+hostname: ceres
 description: |
-  This is my personnal computer: an Intel nuc called phobos.
+  This is my old and venerable laptop
 readme: |
   In order to configure this computer, you need to setup the TERM
   capabilities to handle 24bit. Just compile the source with
