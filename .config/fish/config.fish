@@ -34,7 +34,7 @@ function sudo
     TERM=xterm-256color $SUDO_BIN $argv
 end
 
-function config
+function dotfiles
     set repo git@gitlab.com:dangoncalves/dotfiles
     set gitdir ~/.local/share/dotfiles
     set worktree ~
