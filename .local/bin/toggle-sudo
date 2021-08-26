@@ -1,0 +1,12 @@
+#!/bin/bash
+
+u2f_configured=""
+[[ $(grep '^\([^#].*\)\(pam_u2f.so\)\(.*\)$' /etc/pam.d/sudo) ]] && \
+    sudo sed -i -e 's/^\([^#].*\)\(pam_u2f.so\)\(.*\)/#\1\2\3/' /etc/pam.d/sudo && \
+    sudo sed -i -e 's/^\(.*env_reset\)\(,timestamp_timeout=0\)$/\1/' /etc/sudoers && \
+    u2f_configured="yes" && \
+    echo "u2f disabled"
+[[ -z ${u2f_configured} ]] && [[ $(grep '^#\(.*\)\(pam_u2f.so\)\(.*\)$' /etc/pam.d/sudo) ]] && \
+    (sudo sed -i -e 's/^#\(.*\)\(pam_u2f.so\)\(.*\)$/\1\2\3/' /etc/pam.d/sudo && \
+    sudo sed -i -e 's/^\(.*env_reset\)$/\1,timestamp_timeout=0/' /etc/sudoers && \
+    echo "u2f enabled") || exit 0 
