@@ -47,3 +47,7 @@ function dotfiles
         git --git-dir $gitdir --work-tree $worktree $argv
     end
 end
+
+function activate
+    source /opt/venv/$argv[1]/bin/activate.fish
+end
