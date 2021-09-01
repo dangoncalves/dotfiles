@@ -1,0 +1,234 @@
+* Configure melpa repository
+Add Melpa stable to the available repository list
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+  ;; and `package-pinned-packages`. Most users will not need or want to do this.
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  )
+(package-initialize)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+#+END_SRC
+
+Check that TLS connection can be trusted
+#+BEGIN_SRC emacs-lisp
+(setq tls-checktrust t)
+(let ((trustfile
+       (replace-regexp-in-string
+	"\\\\" "/"
+	(replace-regexp-in-string
+	 "\n" ""
+	 (shell-command-to-string "python -m certifi")))))
+  (setq tls-program
+	(list
+	 (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+		 (if (eq window-system 'w32) ".exe" "") trustfile)))
+  (setq gnutls-verify-error t)
+  (setq gnutls-trustfiles (list trustfile)))
+#+END_SRC
+
+Ensure that use-package is installed while we use it later in this config
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+#+END_SRC
+
+* Bootstrap
+Require use-package previously installed
+#+BEGIN_SRC emacs-lisp
+(require 'use-package)
+#+END_SRC
+
+Configure magit
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :bind (("C-g" . magit-status))
+  :ensure t)
+#+END_SRC
+
+Configure rust-mode
+#+BEGIN_SRC emacs-lisp
+(use-package rust-mode
+  :ensure t)
+#+END_SRC
+
+Configure yaml-mode
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t)
+#+END_SRC
+
+Configure Neotree
+#+BEGIN_SRC emacs-lisp
+(use-package neotree
+  :init
+  (setq neo-window-width 50)
+  :bind (("C-x C-n" . neotree-toggle))
+  :ensure t
+  :commands (neotree-toggle))
+#+END_SRC
+
+Configure Powerline
+#+BEGIN_SRC emacs-lisp
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
+#+END_SRC
+
+Configure Editorconfig
+#+BEGIN_SRC emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+#+END_SRC
+
+Configure Company
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :init
+  (add-hook 'after-init-hook 'global-company-mode))
+#+END_SRC
+
+Configure org-reveal
+#+BEGIN_SRC emacs-lisp
+(use-package ox-reveal
+  :ensure t)
+(setq org-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/")
+(setq org-reveal-mathjax t)
+(use-package htmlize
+  :ensure t)
+#+END_SRC
+
+Configure fill-column-indicator
+#+BEGIN_SRC emacs-lisp
+(use-package fill-column-indicator
+  :ensure t)
+#+END_SRC
+
+Configure try
+#+BEGIN_SRC emacs-lisp
+(use-package try
+  :ensure t)
+#+END_SRC
+
+Configure solarized-theme
+#+BEGIN_SRC emacs-lisp
+(use-package solarized-theme
+  :ensure t)
+#+END_SRC
+
+Configure Better Defaults
+#+BEGIN_SRC emacs-lisp
+(use-package better-defaults
+  :ensure t)
+#+END_SRC
+
+Configure fish-mode
+#+BEGIN_SRC emacs-lisp
+(use-package fish-mode
+  :ensure t)
+#+END_SRC
+
+* Programming stuffs
+Require rust-mode previously installed
+#+BEGIN_SRC emacs-lisp
+(require 'rust-mode)
+#+END_SRC
+
+* Load customisation
+Define useful function
+#+BEGIN_SRC emacs-lisp
+(eval-when-compile
+  (require 'solarized-palettes))
+(defun get-solarized-color (color)
+  "Return solarized colors from dark solarized palette"
+  (cdr (assoc color solarized-dark-color-palette-alist)))
+#+END_SRC
+
+Configure how to display line-numbers-mode or not
+#+BEGIN_SRC emacs-lisp
+(when (version<= "26.0.50" emacs-version)
+  (require 'display-line-numbers)
+  (defcustom display-line-numbers-exempt-modes '(vterm-mode
+                                                 eshell-mode
+                                                 shell-mode
+                                                 term-mode
+                                                 ansi-term-mode
+                                                 ibuffer-mode
+                                                 help-mode
+                                                 Info-mode
+                                                 mu4e~update-mail-mode
+                                                 mu4e-headers-mode
+                                                 mu4e-main-mode
+                                                 magit-status-mode)
+    "Major modes on which to disable the linum mode, exempts them from global requirement"
+    :group 'display-line-numbers
+    :type 'list
+    :version "green")
+  (defcustom display-line-numbers-exempt-buffer-name '(" *NeoTree*")
+    "Buffer names on which to disable the linum mode, exempts them from global requirement"
+    :group 'display-line-numbers
+    :type 'list
+    :version "green")
+
+  (defun display-line-numbers--turn-on ()
+    "turn on line numbers but exempting certain major modes defined in `display-line-numbers-exempt-modes'"
+    (if (and
+         (not (member major-mode display-line-numbers-exempt-modes))
+         (not (member (buffer-name) display-line-numbers-exempt-buffer-name))
+         (not (minibufferp)))
+        (display-line-numbers-mode)))
+  (global-display-line-numbers-mode)
+  (global-hl-line-mode))
+#+END_SRC
+
+Customize some faces
+#+BEGIN_SRC emacs-lisp
+;; For solarized theme
+(set-face-inverse-video-p 'vertical-border nil)
+(set-face-background 'vertical-border (face-background 'default))
+(set-face-foreground 'vertical-border (get-solarized-color 'base00))
+(set-display-table-slot standard-display-table
+			'vertical-border
+                        (make-glyph-code ?\u2502))
+(set-face-background 'line-number (get-solarized-color 'default))
+(set-face-foreground 'line-number (get-solarized-color 'base01))
+(set-face-background 'line-number-current-line (get-solarized-color 'base02))
+(set-face-background 'hl-line (get-solarized-color 'base02))
+#+END_SRC
+
+Disable any background
+#+BEGIN_SRC emacs-lisp
+(defun on-after-init ()
+  (unless (display-graphic-p (selected-frame))
+    (set-face-background 'default "unspecified-bg" (selected-frame))))
+(add-hook 'window-setup-hook 'on-after-init)
+
+#+END_SRC
+
+* Keybindings
+Magit
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
+* Load Theme
+Finally we can load the theme
+#+BEGIN_SRC emacs-lisp
+(load-theme 'solarized-dark t)
+#+END_SRC

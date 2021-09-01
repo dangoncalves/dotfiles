@@ -1,9 +1,5 @@
-(add-to-list 'load-path "~/.emacs.d/config")
+(require 'org)
+(org-babel-load-file
+ (expand-file-name "my-settings.org"
+                   user-emacs-directory))
 
-(require 'melpa-config)
-(require 'bootstrap)
-(require 'programming)
-(require 'custom-variables-faces)
-(require 'keybindings)
-
-(load-theme 'solarized-dark t)
