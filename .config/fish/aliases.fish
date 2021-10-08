@@ -35,7 +35,7 @@ function dotfiles
     set worktree ~
     if test $argv[1] = 'init'
         git clone --bare $repo $gitdir
-        config config --local status.showUntrackedFiles no
+        dotfiles config --local status.showUntrackedFiles no
     else if test $argv[1] = 'tig'
         GIT_DIR=$gitdir GIT_WORK_TREE=$worktree tig
     else
@@ -44,53 +44,53 @@ function dotfiles
 end
 
 function activate
-    source /opt/venv/$argv[1]/bin/activate.fish
+    source ~/.local/share/venv/$argv[1]/bin/activate.fish
 end
 
 function cookiecutter
-    /opt/venv/cookiecutter/bin/cookiecutter $argv
+    ~/.local/share/venv/cookiecutter/bin/cookiecutter $argv
 end
 
 function ansible
-    /opt/venv/ansible/bin/ansible $argv
+    ~/.local/share/venv/ansible/bin/ansible $argv
 end
 
 function ansible-config
-    /opt/venv/ansible/bin/ansible-config $argv
+    ~/.local/share/venv/ansible/bin/ansible-config $argv
 end
 
 function ansible-connection
-    /opt/venv/ansible/bin/ansible-connection $argv
+    ~/.local/share/venv/ansible/bin/ansible-connection $argv
 end
 
 function ansible-console
-    /opt/venv/ansible/bin/ansible-console $argv
+    ~/.local/share/venv/ansible/bin/ansible-console $argv
 end
 
 function ansible-doc
-    /opt/venv/ansible/bin/ansible-doc $argv
+    ~/.local/share/venv/ansible/bin/ansible-doc $argv
 end
 
 function ansible-galaxy
-    /opt/venv/ansible/bin/ansible-galaxy $argv
+    ~/.local/share/venv/ansible/bin/ansible-galaxy $argv
 end
 
 function ansible-inventory
-    /opt/venv/ansible/bin/ansible-inventory $argv
+    ~/.local/share/venv/ansible/bin/ansible-inventory $argv
 end
 
 function ansible-playbook
-    /opt/venv/ansible/bin/ansible-playbook $argv
+    ~/.local/share/venv/ansible/bin/ansible-playbook $argv
 end
 
 function ansible-pull
-    /opt/venv/ansible/bin/ansible-pull $argv
+    ~/.local/share/venv/ansible/bin/ansible-pull $argv
 end
 
 function ansible-test
-    /opt/venv/ansible/bin/ansible-test $argv
+    ~/.local/share/venv/ansible/bin/ansible-test $argv
 end
 
 function ansible-vault
-    /opt/venv/ansible/bin/ansible-vault $argv
+    ~/.local/share/venv/ansible/bin/ansible-vault $argv
 end
