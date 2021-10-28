@@ -94,3 +94,7 @@ end
 function ansible-vault
     ~/.local/share/venv/ansible/bin/ansible-vault $argv
 end
+
+function my-gandi
+    ~/.local/share/venv/my_gandi/bin/my-gandi $argv
+end
