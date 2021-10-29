@@ -16,7 +16,7 @@ if status is-interactive
 
     source ~/.config/fish/aliases.fish
 
-    if test -f utils.fish
-        source utils.fish
+    if test -f hacking.fish
+        source hacking.fish
     end
 end
