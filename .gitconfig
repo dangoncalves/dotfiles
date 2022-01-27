@@ -2,6 +2,7 @@
 	name = Daniel Gonçalves
 	email = daniel.gonc@lves.fr
 	username = dangoncalves
+	signingkey = 00ED4AB2C41B0B7C
 [alias]
 	st = status
 	br = branch
@@ -20,6 +21,8 @@
 	editor = emacs
 	excludesfile = /home/daniel/.gitignore_global
 [commit]
-	gpgsign = false
+	gpgsign = true
 [init]
 	defaultBranch = main
+[gpg]
+	program = gpg
