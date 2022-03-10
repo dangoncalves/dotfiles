@@ -54,7 +54,7 @@ Require use-package previously installed
 Configure magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
-  :bind (("C-g" . magit-status))
+  :bind (("C-x C-g" . magit-status))
   :ensure t)
 #+END_SRC
 
@@ -72,12 +72,27 @@ Configure yaml-mode
 
 Configure Neotree
 #+BEGIN_SRC emacs-lisp
-(use-package neotree
-  :init
-  (setq neo-window-width 50)
-  :bind (("C-x C-n" . neotree-toggle))
-  :ensure t
-  :commands (neotree-toggle))
+  (use-package neotree
+    :init
+    (setq neo-window-width 50)
+    (setq neo-show-hidden-files t)
+    (defun neotree-projectile ()
+      "Open Neotree using projectile projects root"
+      (interactive)
+      (let ((project-dir (projectile-project-root))
+            (file-name (buffer-file-name)))
+        (neotree-toggle)
+        (if project-dir
+            (if (neo-global--window-exists-p)
+                (progn
+                  (neotree-dir project-dir)
+                  (neotree-find file-name)))
+          (message "Could not find git project root."))))
+    :bind (
+           ("C-x C-n" . neotree-toggle)
+           ("C-& C-n" . neotree-projectile))
+    :ensure t
+    :commands (neotree-toggle))
 #+END_SRC
 
 Configure Powerline
@@ -142,6 +157,71 @@ Configure fish-mode
 #+BEGIN_SRC emacs-lisp
 (use-package fish-mode
   :ensure t)
+#+END_SRC
+
+Configure lua-mode
+#+BEGIN_SRC emacs-lisp
+(use-package lua-mode
+  :ensure t)
+#+END_SRC
+
+Configure ag
+#+BEGIN_SRC emacs-lisp
+(use-package ag
+  :ensure t)
+#+END_SRC
+
+Configure vterm
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm
+    :config
+    (setq vterm-shell "/usr/bin/fish")
+    (setq vterm-kill-buffer-on-exit t)
+    (defun vterm-split-horizontally (name)
+      (interactive "B Buffer name:")
+      (select-window (split-window-horizontally))
+      (vterm name))
+    (defun vterm-split-vertically (name &optional tiny)
+      (interactive "B Buffer name:")
+      (select-window (split-window-vertically
+                      (when tiny (-(/ (window-total-height) 4)))))
+      (vterm name))
+    (unbind-key "C-<left>" 'vterm-mode-map)
+    (unbind-key "C-<right>" 'vterm-mode-map)
+    (unbind-key "C-<up>" 'vterm-mode-map)
+    (unbind-key "C-<down>" 'vterm-mode-map)
+    (global-set-key (kbd "C-& !") (lambda ()
+                                    (interactive)
+                                    (vterm-split-horizontally "vterm")))
+    (global-set-key (kbd "C-& _") (lambda ()
+                                    (interactive)
+                                    (vterm-split-vertically "vterm")))
+    (global-set-key (kbd "C-& ²") (lambda ()
+                                    (interactive)
+                                    (vterm-split-vertically "vterm" t)))
+    :init
+     (defun on-vterm-exit (buffer event)
+       (kill-buffer-and-window))
+     (add-hook 'vterm-exit-functions 'on-vterm-exit)
+    :ensure t)
+#+END_SRC
+
+Configure Projectile
+#+BEGIN_SRC emacs-lisp
+  (defun start-tests-term ()
+    (interactive)
+    (setq default-directory (projectile-project-root))
+    (vterm-split-vertically "Tests" t)
+    (vterm-split-horizontally "Python REPL"))
+  (use-package projectile
+    :ensure t
+    :init
+    (projectile-mode +1)
+    :bind (:map projectile-mode-map
+                ("C-c p" . projectile-command-map))
+    :config
+    (setq projectile-switch-project-action 'neotree-projectile)
+    (setq projectile-project-search-path '("~/hacking")))
 #+END_SRC
 
 * Programming stuffs
@@ -222,9 +302,15 @@ Disable any background
 #+END_SRC
 
 * Keybindings
-Magit
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x !") 'split-window-horizontally)
+  (global-set-key (kbd "C-x _") 'split-window-vertically)
+  (global-set-key (kbd "C-<left>") 'windmove-left)
+  (global-set-key (kbd "C-<right>") 'windmove-right)
+  (global-set-key (kbd "C-<up>") 'windmove-up)
+  (global-set-key (kbd "C-<down>") 'windmove-down)
+
 #+END_SRC
 
 * Load Theme
