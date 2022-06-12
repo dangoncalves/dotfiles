@@ -15,10 +15,6 @@ if status is-interactive
     set -x VAGRANT_DEFAULT_PROVIDER libvirt
     set -x LIBVIRT_DEFAULT_URI qemu:///system
 
-    set -x GPG_TTY (tty)
-    set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
-    gpgconf --launch gpg-agent
-
     source ~/.config/fish/aliases.fish
 
     if test -f .hacking/custom.fish
