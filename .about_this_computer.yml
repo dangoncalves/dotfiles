@@ -1,7 +1,7 @@
 ---
-hostname: phobos
+hostname: dotfiles-demo
 description: |
-  This is my personnal computer: an Intel nuc called phobos.
+  This is a vm for demo the dotfiles project.
 readme: |
   In order to configure this computer, you need to setup the TERM
   capabilities to handle 24bit. Just compile the source with
